@@ -30,6 +30,13 @@ export function getDb(): Database.Database {
 // ---------------------------------------------------------------------------
 function initSchema(db: Database.Database) {
   db.exec(`
+    CREATE TABLE IF NOT EXISTS agents (
+      id          TEXT PRIMARY KEY,
+      name        TEXT NOT NULL,
+      description TEXT NOT NULL DEFAULT '',
+      created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
     CREATE TABLE IF NOT EXISTS tasks (
       id            TEXT    PRIMARY KEY,
       title         TEXT    NOT NULL,
