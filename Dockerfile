@@ -2,11 +2,11 @@
 FROM oven/bun:1 AS deps
 WORKDIR /app
 
-# Native addon build tools (required for better-sqlite3)
-RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
+# Native addon build tools + Node.js (required for better-sqlite3 native compilation)
+RUN apt-get update && apt-get install -y python3 make g++ nodejs && rm -rf /var/lib/apt/lists/*
 
 COPY package.json bun.lock* bun.lockb* ./
-RUN bun install --frozen-lockfile
+RUN bun install
 
 # ---- builder stage ----
 FROM deps AS builder
