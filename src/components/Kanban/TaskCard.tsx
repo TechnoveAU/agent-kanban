@@ -1,6 +1,7 @@
 'use client';
 
 import { useDraggable } from '@dnd-kit/core';
+import { useEffect, useRef, useState } from 'react';
 
 interface TaskCardProps {
   id: string;
@@ -15,6 +16,7 @@ interface TaskCardProps {
     avatar: string;
   };
   onDoubleClick?: () => void;
+  onDelete?: () => void;
 }
 
 const priorityColors = {
@@ -33,8 +35,22 @@ export function TaskCard({
   timeEstimate,
   assignee,
   onDoubleClick,
+  onDelete,
 }: TaskCardProps) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id });
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [menuOpen]);
 
   return (
     // Outer wrapper: owns the droppable ref + double-click. No dnd listeners here
@@ -61,7 +77,35 @@ export function TaskCard({
         >
           {priority.charAt(0).toUpperCase() + priority.slice(1)}
         </span>
-        <button className="text-gray-400 hover:text-gray-600 text-base leading-none p-0.5">⋮</button>
+          <div
+            ref={menuRef}
+            className="relative"
+            onPointerDown={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setMenuOpen((prev) => !prev);
+              }}
+              className="text-gray-400 hover:text-gray-600 text-base leading-none p-0.5"
+            >
+              ⋮
+            </button>
+            {menuOpen && (
+              <div className="absolute right-0 top-6 z-50 min-w-[120px] bg-white border border-gray-200 rounded-lg shadow-lg py-1">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setMenuOpen(false);
+                    onDelete?.();
+                  }}
+                  className="w-full text-left px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
       </div>
 
       {/* Title */}

@@ -142,3 +142,9 @@ export function getTaskById(id: string): Task | null {
   const row = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id) as TaskRow | undefined;
   return row ? rowToTask(row) : null;
 }
+
+/** Delete a task by id. */
+export function deleteTask(id: string): void {
+  const db = getDb();
+  db.prepare('DELETE FROM tasks WHERE id = ?').run(id);
+}

@@ -2,7 +2,7 @@
 
 import { getDb } from '@/lib/db';
 import type { CreateTaskInput, Task, TaskStatus, UpdateTaskInput } from '@/lib/tasks';
-import { createTask as dbCreateTask, updateTask as dbUpdateTask } from '@/lib/tasks';
+import { createTask as dbCreateTask, deleteTask as dbDeleteTask, updateTask as dbUpdateTask } from '@/lib/tasks';
 import { revalidatePath } from 'next/cache';
 
 export async function updateTaskStatus(taskId: string, newStatus: TaskStatus): Promise<void> {
@@ -21,4 +21,9 @@ export async function updateTask(id: string, input: UpdateTaskInput): Promise<Ta
   const task = dbUpdateTask(id, input);
   revalidatePath('/kanban');
   return task;
+}
+
+export async function deleteTask(id: string): Promise<void> {
+  dbDeleteTask(id);
+  revalidatePath('/kanban');
 }

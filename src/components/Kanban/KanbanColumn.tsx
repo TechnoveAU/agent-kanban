@@ -10,9 +10,10 @@ interface KanbanColumnProps {
   count: number;
   tasks: KanbanTask[];
   onTaskDoubleClick?: (task: KanbanTask) => void;
+  onTaskDelete?: (taskId: string) => void;
 }
 
-export function KanbanColumn({ title, status, count, tasks, onTaskDoubleClick }: KanbanColumnProps) {
+export function KanbanColumn({ title, status, count, tasks, onTaskDoubleClick, onTaskDelete }: KanbanColumnProps) {
   const { setNodeRef, isOver } = useDroppable({ id: status });
 
   return (
@@ -40,6 +41,7 @@ export function KanbanColumn({ title, status, count, tasks, onTaskDoubleClick }:
             key={task.id}
             {...task}
             onDoubleClick={() => onTaskDoubleClick?.(task)}
+            onDelete={() => onTaskDelete?.(task.id)}
           />
         ))}
         {/* Drop zone placeholder when column is empty and being hovered */}

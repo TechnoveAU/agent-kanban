@@ -1,16 +1,16 @@
 'use client';
 
-import { updateTaskStatus } from '@/app/actions/tasks';
+import { deleteTask, updateTaskStatus } from '@/app/actions/tasks';
 import type { TaskStatus } from '@/lib/tasks';
 import {
-    closestCenter,
-    DndContext,
-    DragEndEvent,
-    DragOverlay,
-    DragStartEvent,
-    PointerSensor,
-    useSensor,
-    useSensors,
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
 } from '@dnd-kit/core';
 import { useCallback, useState } from 'react';
 import { EditTaskModal } from './EditTaskModal';
@@ -68,6 +68,13 @@ export function KanbanBoard({ title, subtitle, columns: initialColumns, agents }
         tasks: col.tasks.map((t) => (t.id === updated.id ? { ...t, ...updated } : t)),
       }))
     );
+  }, []);
+
+  const handleTaskDelete = useCallback(async (taskId: string) => {
+    setColumns((prev) =>
+      prev.map((col) => ({ ...col, tasks: col.tasks.filter((t) => t.id !== taskId) }))
+    );
+    await deleteTask(taskId);
   }, []);
 
   const sensors = useSensors(
@@ -147,6 +154,7 @@ export function KanbanBoard({ title, subtitle, columns: initialColumns, agents }
                 count={column.tasks.length}
                 tasks={column.tasks}
                 onTaskDoubleClick={handleTaskDoubleClick}
+                onTaskDelete={handleTaskDelete}
               />
             ))}
           </div>

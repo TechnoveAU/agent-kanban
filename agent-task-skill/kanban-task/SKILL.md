@@ -10,7 +10,7 @@ and report completion.
 
 ## Base URL
 
-The Kanban board runs at `http://localhost:3000` by default. Substitute the
+The Kanban board runs at `http://localhost:3002` by default. Substitute the
 correct host/port if it is deployed elsewhere.
 
 ---
@@ -21,7 +21,7 @@ correct host/port if it is deployed elsewhere.
 to work on.
 
 ```
-GET http://localhost:3000/api/<YOUR_AGENT_ID>
+GET http://localhost:3002/api/<YOUR_AGENT_ID>
 ```
 
 - Replace `<YOUR_AGENT_ID>` with your assigned agent ID (e.g. `agent_abc123`).
@@ -59,7 +59,7 @@ Save the `id` field — you will need it to mark the task done.
 **When to use:** Once you have fully completed the work for the current task.
 
 ```
-POST http://localhost:3000/api/<TASK_ID>/done
+POST http://localhost:3002/api/<TASK_ID>/done
 ```
 
 - Replace `<TASK_ID>` with the `id` returned in step 1 (e.g. `task_1234567890_ab1cd`).

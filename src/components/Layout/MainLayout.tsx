@@ -24,7 +24,7 @@ export function MainLayout({ children, health = 'healthy', breadcrumbs = [] }: M
         <Sidebar />
 
         <div className="flex-1 ml-[170px] overflow-auto bg-white">
-          <div className="min-h-full mx-auto max-w-[1000px] w-full">
+          <div className="min-h-full mx-auto max-w-[1240px] w-full">
             {children}
           </div>
         </div>
