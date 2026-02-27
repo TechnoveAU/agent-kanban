@@ -1,0 +1,15 @@
+services:
+  app:
+    build: .
+    container_name: agent-kanban-copilot
+    ports:
+      - "3002:3000"
+    volumes:
+      # Persist the SQLite database across container restarts
+      - kanban-db:/app/.db
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+
+volumes:
+  kanban-db:
